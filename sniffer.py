@@ -6,7 +6,6 @@ def packet_callback(packet):
         ip_dst = packet[IP].dst
         proto = packet[IP].proto
 
-        # Protocol mapping
         protocol = {6: "TCP", 17: "UDP", 1: "ICMP"}.get(proto, str(proto))
 
         print(f"\n[+] Packet Captured")
@@ -14,13 +13,9 @@ def packet_callback(packet):
         print(f"    Destination IP: {ip_dst}")
         print(f"    Protocol: {protocol}")
 
-        # Show payload if available
         if packet.haslayer(Raw):
             payload = packet[Raw].load
-            try:
-                print(f"    Payload: {payload[:50]}...")  # First 50 bytes
-            except Exception as e:
-                print(f"    Payload: (unreadable) | Error: {e}")
+            print(f"    Payload: {payload[:50]}...")  # Show first 50 bytes
 
 print("Starting packet sniffer... Press Ctrl+C to stop.")
 sniff(prn=packet_callback, store=False)
