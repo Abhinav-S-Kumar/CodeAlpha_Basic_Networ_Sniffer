@@ -1,21 +1,9 @@
-from scapy.all import sniff, IP, TCP, UDP, ICMP, Raw
+from scapy.all import sniff
 
-def packet_callback(packet):
-    if packet.haslayer(IP):
-        ip_src = packet[IP].src
-        ip_dst = packet[IP].dst
-        proto = packet[IP].proto
+# Function to handle each packet
+def packet_handler(packet):
+    print(packet.summary())
 
-        protocol = {6: "TCP", 17: "UDP", 1: "ICMP"}.get(proto, str(proto))
-
-        print(f"\n[+] Packet Captured")
-        print(f"    Source IP: {ip_src}")
-        print(f"    Destination IP: {ip_dst}")
-        print(f"    Protocol: {protocol}")
-
-        if packet.haslayer(Raw):
-            payload = packet[Raw].load
-            print(f"    Payload: {payload[:50]}...")  # Show first 50 bytes
-
-print("Starting packet sniffer... Press Ctrl+C to stop.")
-sniff(prn=packet_callback, store=False)
+# Capture only 5 packets (for demo)
+print("Starting dummy packet capture (Press CTRL+C to stop)...")
+sniff(count=5, prn=packet_handler)
